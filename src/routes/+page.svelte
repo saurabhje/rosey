@@ -13,7 +13,7 @@
             "8888.""888P"P.888".88P
              "88888ooo  888P".o888
                ""8P"".oooooo8888P
-      .oo888ooo.    8888NICK8P8
+      .oo888ooo.    8888ASAS8P8
     o88888"888"88o.  "8888"".88   .oo888oo..
      8888" "88 88888.       88".o88888888"888.
      "8888o.""o 88"88o.    o8".888"888"88 "88P
@@ -35,9 +35,9 @@
 <style>
     .ascii {
         display: flex;
-        align-items: center;
         justify-content: center;
         animation: blinkFade 2s ease-in-out infinite;
+        margin: 20px;
     }
     pre {
         color: red;
@@ -53,7 +53,9 @@
         bottom: 30px;
         width: 100%;
     }
-
+    a{
+        color: black;
+    }
     a:visited{
         color: black;
     }
