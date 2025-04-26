@@ -28,24 +28,41 @@
      "8oo...oo888""         [SA] 29.01.25
     </pre>
 </div>
-
+<div class="links">
+    <a href="/rosey">rosey</a>
+    <a href="/about">about</a>
+</div>
 <style>
     .ascii {
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 95vh;
         animation: blinkFade 2s ease-in-out infinite;
     }
     pre {
         color: red;
+    }
+    .links {
+        font-family: monospace;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        font-size: 1.5em;
+        position: fixed;
+        bottom: 30px;
+        width: 100%;
+    }
+
+    a:visited{
+        color: black;
     }
     @keyframes blinkFade {
         0% {
             opacity: 1;
         }
         50% {
-            opacity: 0.5;
+            opacity: 0.4;
         }
         100% {
             opacity: 1;

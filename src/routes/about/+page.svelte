@@ -1,14 +1,35 @@
-<h1>Everything Rosey</h1>
-<p>I (Je) love you. You make me smile, nicer, happy and most importantly you make me better and complete.</p>
+<h1>About</h1>
+<p>
+    Greeting, I am <span>Je</span> I am the creator of this webpage, I created
+    this application because- I wanted to do something cute for my girlfriend (<span>Rosey</span>). I had to buy a domain, and get some SSL certificates, so I could use the
+    subdomains to link my other projects. I wanted to work with sveltkit too.
+</p>
+<div class="links">
+    <a href="/">home</a>
+    <a href="/rosey">rosey</a>
+</div>
 <style>
-    h1{
-        text-align: center;
+    h1 {
         font-family: monospace;
+        text-align: center;
+    }
+    span {
+        font-weight: 800;
     }
     p {
-        margin: 0 20px;
         font-family: monospace;
-        text-align: center;
         font-size: 1.5em;
+        margin: 20px;
+    }
+    .links {
+        font-family: monospace;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        font-size: 1.5em;
+    }
+    a:visited{
+        color: black;
     }
 </style>
