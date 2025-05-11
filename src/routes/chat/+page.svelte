@@ -1,7 +1,6 @@
 <script lang="ts">
     import { onMount, afterUpdate } from "svelte";
     import type { ChatMessage } from "$lib";
-    import { ChatClient } from "@ably/chat";
     import * as Ably from "ably";
     export let data: { user: string };
 
@@ -9,12 +8,11 @@
     let messages: ChatMessage[] = [];
     let message: string = "";
     let messagesContainer: HTMLDivElement;
-    let chatClient: ChatClient;
     let channel: any;
 
     onMount(async () => {
         const ablyClient = new Ably.Realtime({
-            key: process.env.SOCKET,
+            key: import.meta.env.VITE_SOCKET,
             clientId: username,
         });
 
