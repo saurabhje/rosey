@@ -4,7 +4,7 @@ import { env } from '$env/dynamic/private';
 
 const users = [
     { username: 'rosey', password: env.RP },
-    { username: 'ranran', password: env.RAP },
+    { username: 'je', password: env.RAP },
     { username: 'guest', password: env.GP },
 ]
 export const POST: RequestHandler = async ({ request }) => {

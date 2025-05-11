@@ -1,26 +1,39 @@
 <script lang="ts">
     import { onMount, afterUpdate } from "svelte";
-    type ChatMessage = {
-        user: string;
-        text: string;
-    };
-
+    import type { ChatMessage } from "$lib";
+    import { ChatClient } from "@ably/chat";
+    import * as Ably from "ably";
     export let data: { user: string };
-    const username = data.user;
 
+    const username = data.user;
     let messages: ChatMessage[] = [];
     let message: string = "";
-
     let messagesContainer: HTMLDivElement;
-    let inputField: HTMLInputElement;
+    let chatClient: ChatClient;
+    let channel: any;
 
-    function addMessage(event: Event): void {
+    onMount(async () => {
+        const ablyClient = new Ably.Realtime({
+            key: "5XHOOA.6_oKig:DUW6egg-PUsRbsdxI_yk5GUtsKBIBozhT3791ZfezOo",
+            clientId: username,
+        });
+
+        channel = ablyClient.channels.get("public-chat");
+        channel.subscribe("message", (msg: any) => {
+            messages = [...messages, msg.data];
+        });
+    });
+
+    async function addMessage(event: Event): Promise<void> {
         event.preventDefault();
         if (message.trim()) {
-            messages = [...messages, { user: username, text: message }];
+            const newMessage: ChatMessage = {
+                user: username,
+                text: message,
+            };
+            await channel.publish("message", newMessage);
             message = "";
         }
-        inputField?.focus();
     }
     afterUpdate(() => {
         if (messagesContainer) {
@@ -43,7 +56,6 @@
     <form on:submit={addMessage} class="message-form">
         <input
             type="text"
-            bind:this={inputField}
             bind:value={message}
             class="input-field"
             placeholder="Type a message..."
