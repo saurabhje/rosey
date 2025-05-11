@@ -14,7 +14,7 @@
 
     onMount(async () => {
         const ablyClient = new Ably.Realtime({
-            key: "5XHOOA.6_oKig:DUW6egg-PUsRbsdxI_yk5GUtsKBIBozhT3791ZfezOo",
+            key: process.env.SOCKET,
             clientId: username,
         });
 
