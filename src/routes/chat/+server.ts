@@ -1,4 +1,4 @@
-import { connectToDatabase, run } from '$lib';
+import { connectToDatabase } from '$lib';
 import { json } from '@sveltejs/kit';
 import type { ChatMessage } from '$lib'
 
@@ -10,7 +10,6 @@ export async function GET() {
 
 export async function POST({ request }) {
     const message: ChatMessage = await request.json();
-    console.log(run())
     const db = await connectToDatabase();
     await db.collection('messages').insertOne(message);
     return new Response('Message stored', { status: 201 });
