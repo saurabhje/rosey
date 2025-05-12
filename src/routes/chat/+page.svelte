@@ -30,6 +30,15 @@
                 text: message,
             };
             await channel.publish("message", newMessage);
+            // const response =  await fetch("/chat", {
+            //     method: "POST",
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //     },
+            //     body: JSON.stringify(newMessage),   
+            // })
+            // console.log(response);
+            
             message = "";
         }
     }
@@ -42,8 +51,11 @@
         if (user === "rosey") {
             return "#fc3d93";
         }
-        if (user === "sera") {
+        else if (user === "sera") {
             return "#03a9fc";
+        }
+        else if (user === "guest"){
+            return ""
         }
     }
 </script>
@@ -103,6 +115,7 @@
         padding: 4px 8px;
         border-radius: 6px;
         width: fit-content;
+        font-weight: 400;
         max-width: 80%;
         font-size: 1.1em;
         word-wrap: break-word;

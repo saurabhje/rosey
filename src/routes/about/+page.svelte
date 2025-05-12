@@ -7,6 +7,7 @@
 <div class="links">
     <a href="/">home</a>
     <a href="/rosey">rosey</a>
+    <a href="/chat">chat</a>
 </div>
 <style>
     h1 {

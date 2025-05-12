@@ -1,8 +1,9 @@
 <h1>Everything Rosey</h1>
-<p>I (Je) love you. You make me smile, nicer, happy and most importantly you make me better and complete.</p>
+<p>Rosey Dosey Gosey as she says- she is the blooming flower of happiness in many people's life. She is smart, intelligent, extremly beautiful, soothing smiler and talker. I (Je) love you</p>
 <div class="links">
     <a href="/">home</a>
     <a href="/about">about</a>
+    <a href="/chat">chat</a>
 </div>
 <style>
     h1{
