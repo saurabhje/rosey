@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb';
 
-const uri = process.env.URI || "";
+const uri = process.env.URI || "mongodb+srv://rosey:rosey@txt.aqvxyhr.mongodb.net/?retryWrites=true&w=majority&appName=txt";
 const client = new MongoClient(uri);
 let isConnected = false;
 

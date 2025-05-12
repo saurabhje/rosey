@@ -38,14 +38,28 @@
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
     });
+    function getUserColor(user: string) {
+        if (user === "rosey") {
+            return "#fc3d93";
+        }
+        if (user === "sera") {
+            return "#03a9fc";
+        }
+    }
 </script>
 
 <h1 style="text-align: center;">Chat</h1>
 <div class="chat-container">
     <div class="messages" bind:this={messagesContainer}>
         {#each messages as msg}
-            <p class="message">
-                <span class="username">{msg.user}:</span>
+            <p
+                class="message {msg.user === username
+                    ? 'my-message'
+                    : 'other-message'}"
+            >
+                <span class="username" style="color: {getUserColor(msg.user)};"
+                    >{msg.user}:</span
+                >
                 <span class="text"> {msg.text}</span>
             </p>
         {/each}
@@ -85,17 +99,26 @@
     }
 
     .message {
-        background-color: #e6e6e6;
         display: inline-block;
         padding: 4px 8px;
         border-radius: 6px;
+        width: fit-content;
         max-width: 80%;
-        margin-bottom: 4px;
         font-size: 1.1em;
         word-wrap: break-word;
+        margin-bottom: 1px;
     }
+    .my-message {
+        align-self: flex-end;
+        background-color: #d1ffd6;
+        text-align: left;
+    }
+    .other-message {
+        align-self: flex-start;
+        background-color: #e6e6e6;
+    }
+
     .username {
-        color: #007acc;
         font-weight: bold;
     }
     .text {
