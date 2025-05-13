@@ -41,6 +41,7 @@
                 timestamp: new Date().toISOString(),
             };
             await channel.publish("message", newMessage);
+            message = "";
             const response = await fetch('/chat', {
                 method: 'POST',
                 headers: {
@@ -49,9 +50,8 @@
                 body: JSON.stringify(newMessage)
             });
             if (!response.ok) {
-                console.error("Failed to send message");
+                console.error("Failed to save message");
             }
-            message = "";
         }
     }
     afterUpdate(() => {
