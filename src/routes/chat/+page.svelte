@@ -74,7 +74,7 @@
     }
 </script>
 
-<h1 style="text-align: center;">Chat</h1>
+<h1 style="text-align: center; font-family:monospace;">Chat</h1>
 <div class="chat-container">
     <div class="messages" bind:this={messagesContainer}>
         {#each messages as msg}
@@ -110,7 +110,6 @@
 
 <style>
     * {
-        font-family: monospace;
         box-sizing: border-box;
     }
 
@@ -129,8 +128,9 @@
         overflow-y: auto;
         margin-bottom: 8px;
     }
-
+    
     .message {
+        font-family: "Arial", sans-serif;
         display: inline-block;
         padding: 4px 8px;
         border-radius: 6px;
@@ -151,6 +151,7 @@
         background-color: #e6e6e6;
     }
     .timestamp {
+        font-family: monospace;
         display: block;
         font-size: 0.8em;
         color: #999;
