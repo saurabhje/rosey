@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb';
+import { PRIVATE_URI } from '$env/static/private';
 
-const uri =process.env.URI || ""
-const client = new MongoClient(uri);
+const client = new MongoClient(PRIVATE_URI);
 
 export async function connectToDatabase() {
     await client.connect();
