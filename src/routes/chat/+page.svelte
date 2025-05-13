@@ -9,6 +9,7 @@
     let messages: ChatMessage[] = [];
     let message: string = "";
     let messagesContainer: HTMLDivElement;
+    let sendButton: HTMLButtonElement;
     let channel: any;
 
     onMount(async () => {
@@ -53,6 +54,12 @@
             if (!response.ok) {
                 console.error("Failed to save message");
             }
+        }
+        if (sendButton) {
+            sendButton.addEventListener("touchend", (e) => {
+                e.preventDefault();
+                addMessage(e);
+            });
         }
     }
     afterUpdate(() => {
@@ -113,7 +120,7 @@
             on:keydown={handleKeyDown}
             placeholder="Type a message..."
         />
-        <button type="button" class="send-button" on:click={addMessage}>Send</button>
+        <button type="button" class="send-button" on:click={addMessage} bind:this={sendButton}>Send</button>
     </div>
 </div>
 
