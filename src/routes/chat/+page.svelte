@@ -9,7 +9,6 @@
     let messages: ChatMessage[] = [];
     let message: string = "";
     let messagesContainer: HTMLDivElement;
-    let messageInput: HTMLInputElement;
     let channel: any;
 
     onMount(async () => {
@@ -44,7 +43,6 @@
             };
             await channel.publish("message", newMessage);
             message = "";
-            messageInput?.focus();
             const response = await fetch('/chat', {
                 method: 'POST',
                 headers: {
@@ -75,6 +73,13 @@
             return ""
         }
     }
+    function handleKeyDown(event: KeyboardEvent) {
+    if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        addMessage(event);
+    }
+}
+
 </script>
 
 <h1 style="text-align: center; font-family:monospace;">Chat</h1>
@@ -100,15 +105,15 @@
         {/each}
     </div>
 
-    <form on:submit={addMessage} class="message-form">
+    <div class="message-form">
         <input
             type="text"
             bind:value={message}
-            bind:this={messageInput}
             class="input-field"
+            on:keydown={handleKeyDown}
             placeholder="Type a message..."
         />
-        <button type="submit" class="send-button">Send</button>
-    </form>
+        <button type="submit" class="send-button" on:click={addMessage}>Send</button>
+    </div>
 </div>
 
