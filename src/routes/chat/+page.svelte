@@ -44,6 +44,7 @@
             };
             await channel.publish("message", newMessage);
             message = "";
+            sendButton?.focus();
             const response = await fetch('/chat', {
                 method: 'POST',
                 headers: {
@@ -54,12 +55,6 @@
             if (!response.ok) {
                 console.error("Failed to save message");
             }
-        }
-        if (sendButton) {
-            sendButton.addEventListener("touchend", (e) => {
-                e.preventDefault();
-                addMessage(e);
-            });
         }
     }
     afterUpdate(() => {
@@ -116,11 +111,12 @@
         <input
             type="text"
             bind:value={message}
+            bind:this={sendButton}
             class="input-field"
             on:keydown={handleKeyDown}
             placeholder="Type a message..."
         />
-        <button type="button" class="send-button" bind:this={sendButton}>Send</button>
+        <button type="button" class="send-button" on:click={addMessage}>Send</button>
     </div>
 </div>
 
