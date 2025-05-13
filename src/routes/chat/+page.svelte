@@ -113,7 +113,7 @@
             on:keydown={handleKeyDown}
             placeholder="Type a message..."
         />
-        <button type="submit" class="send-button" on:click={addMessage}>Send</button>
+        <button type="button" class="send-button" on:click={addMessage}>Send</button>
     </div>
 </div>
 
