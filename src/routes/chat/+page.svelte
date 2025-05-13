@@ -1,4 +1,5 @@
 <script lang="ts">
+    import "./chat.css";
     import { onMount, afterUpdate } from "svelte";
     import type { ChatMessage } from "$lib";
     import * as Ably from "ably";
@@ -108,85 +109,3 @@
     </form>
 </div>
 
-<style>
-    * {
-        box-sizing: border-box;
-    }
-
-    .chat-container {
-        border: 1px solid #ccc;
-        padding: 10px;
-        height: 80vh;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .messages {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        overflow-y: auto;
-        margin-bottom: 8px;
-    }
-    
-    .message {
-        font-family: "Arial", sans-serif;
-        display: inline-block;
-        padding: 4px 8px;
-        border-radius: 6px;
-        width: fit-content;
-        font-weight: 400;
-        max-width: 80%;
-        font-size: 1.1em;
-        word-wrap: break-word;
-        margin-bottom: 1px;
-    }
-    .my-message {
-        align-self: flex-end;
-        background-color: #dbf7de;
-        text-align: left;
-    }
-    .other-message {
-        align-self: flex-start;
-        background-color: #e6e6e6;
-    }
-    .timestamp {
-        font-family: monospace;
-        display: block;
-        font-size: 0.8em;
-        color: #999;
-        margin-top: 4px;
-        text-align: right;
-    }
-    .username {
-        font-weight: bold;
-    }
-    .text {
-        color: #333;
-    }
-    .message-form {
-        display: flex;
-    }
-
-    .input-field {
-        flex-grow: 1;
-        padding: 6px;
-        border: 1px solid #d1d1d1;
-        border-radius: 4px;
-        font-size: 1.1em;
-        transition: border-color 0.2s ease;
-    }
-    .input-field:focus {
-        border-color: #9a9a9a;
-        outline: none;
-    }
-    .send-button {
-        padding: 6px 12px;
-        margin-left: 6px;
-        border: none;
-        background-color: #000;
-        color: white;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-</style>
