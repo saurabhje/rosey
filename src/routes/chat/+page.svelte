@@ -11,6 +11,16 @@
     let channel: any;
 
     onMount(async () => {
+        try{
+            const response = await fetch('/chat');
+            if (!response.ok) {
+                throw new Error("Failed to fetch messages");
+            }
+            const Oldmessages = await response.json();
+            messages = Oldmessages;
+        } catch (error) {
+            console.error("Error fetching messages:", error);
+        }
         const ablyClient = new Ably.Realtime({
             key: import.meta.env.VITE_SOCKET,
             clientId: username,
@@ -28,8 +38,19 @@
             const newMessage: ChatMessage = {
                 user: username,
                 text: message,
+                timestamp: new Date().toISOString(),
             };
             await channel.publish("message", newMessage);
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newMessage)
+            });
+            if (!response.ok) {
+                console.error("Failed to send message");
+            }
             message = "";
         }
     }
@@ -43,9 +64,11 @@
             return "#fc3d93";
         }
         else if (user === "sera") {
-            return "#03a9fc";
+            return "#08018a";
         }
-        else if (user === "guest"){
+        else if (user === "je"){
+            return "#f20505"
+        }else{
             return ""
         }
     }
@@ -60,10 +83,16 @@
                     ? 'my-message'
                     : 'other-message'}"
             >
-                <span class="username" style="color: {getUserColor(msg.user)};"
-                    >{msg.user}:</span
-                >
+                <span class="username" style="color: {getUserColor(msg.user)};">{msg.user}:</span>
+
                 <span class="text"> {msg.text}</span>
+                <br>
+                <span class="timestamp">
+                    {new Date(msg.timestamp).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                    })}
+                </span>
             </p>
         {/each}
     </div>
@@ -114,14 +143,20 @@
     }
     .my-message {
         align-self: flex-end;
-        background-color: #d1ffd6;
+        background-color: #dbf7de;
         text-align: left;
     }
     .other-message {
         align-self: flex-start;
         background-color: #e6e6e6;
     }
-
+    .timestamp {
+        display: block;
+        font-size: 0.8em;
+        color: #999;
+        margin-top: 4px;
+        text-align: right;
+    }
     .username {
         font-weight: bold;
     }
