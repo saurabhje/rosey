@@ -120,7 +120,7 @@
             on:keydown={handleKeyDown}
             placeholder="Type a message..."
         />
-        <button type="button" class="send-button" on:click={addMessage} bind:this={sendButton}>Send</button>
+        <button type="button" class="send-button" bind:this={sendButton}>Send</button>
     </div>
 </div>
 
