@@ -43,8 +43,8 @@
                 timestamp: new Date().toISOString(),
             };
             await channel.publish("message", newMessage);
-            message = "";
             sendButton?.focus();
+            message = "";
             const response = await fetch('/chat', {
                 method: 'POST',
                 headers: {
