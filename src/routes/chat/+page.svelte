@@ -9,7 +9,7 @@
     let messages: ChatMessage[] = [];
     let message: string = "";
     let messagesContainer: HTMLDivElement;
-    let sendButton: HTMLButtonElement;
+    let sendButton: HTMLInputElement;
     let channel: any;
 
     onMount(async () => {
