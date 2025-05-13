@@ -13,8 +13,8 @@
     let channel: any;
 
     onMount(async () => {
-        try{
-            const response = await fetch('/chat');
+        try {
+            const response = await fetch("/chat");
             if (!response.ok) {
                 throw new Error("Failed to fetch messages");
             }
@@ -45,12 +45,12 @@
             await channel.publish("message", newMessage);
             sendButton?.focus();
             message = "";
-            const response = await fetch('/chat', {
-                method: 'POST',
+            const response = await fetch("/chat", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify(newMessage)
+                body: JSON.stringify(newMessage),
             });
             if (!response.ok) {
                 console.error("Failed to save message");
@@ -65,23 +65,20 @@
     function getUserColor(user: string) {
         if (user === "rosey") {
             return "#fc3d93";
-        }
-        else if (user === "sera") {
+        } else if (user === "sera") {
             return "#08018a";
-        }
-        else if (user === "je"){
-            return "#f20505"
-        }else{
-            return ""
+        } else if (user === "je") {
+            return "#f20505";
+        } else {
+            return "";
         }
     }
     function handleKeyDown(event: KeyboardEvent) {
-    if (event.key === "Enter" && !event.shiftKey) {
-        event.preventDefault();
-        addMessage(event);
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            addMessage(event);
+        }
     }
-}
-
 </script>
 
 <h1 style="text-align: center; font-family:monospace;">Chat</h1>
@@ -93,10 +90,12 @@
                     ? 'my-message'
                     : 'other-message'}"
             >
-                <span class="username" style="color: {getUserColor(msg.user)};">{msg.user}:</span>
+                <span class="username" style="color: {getUserColor(msg.user)};"
+                    >{msg.user}:</span
+                >
 
                 <span class="text"> {msg.text}</span>
-                <br>
+                <br />
                 <span class="timestamp">
                     {new Date(msg.timestamp).toLocaleTimeString([], {
                         hour: "2-digit",
@@ -116,7 +115,15 @@
             on:keydown={handleKeyDown}
             placeholder="Type a message..."
         />
-        <button type="button" class="send-button" on:click={addMessage}>Send</button>
+        <button
+            type="button"
+            class="send-button"
+            tabindex="-1"
+            on:mousedown|preventDefault
+            on:click={addMessage}
+        >
+            Send
+        </button>
+        >
     </div>
 </div>
-
