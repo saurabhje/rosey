@@ -124,6 +124,5 @@
         >
             Send
         </button>
-        >
     </div>
 </div>
