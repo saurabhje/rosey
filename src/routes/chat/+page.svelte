@@ -9,6 +9,7 @@
     let messages: ChatMessage[] = [];
     let message: string = "";
     let messagesContainer: HTMLDivElement;
+    let messageInput: HTMLInputElement;
     let channel: any;
 
     onMount(async () => {
@@ -43,6 +44,7 @@
             };
             await channel.publish("message", newMessage);
             message = "";
+            messageInput?.focus();
             const response = await fetch('/chat', {
                 method: 'POST',
                 headers: {
@@ -102,6 +104,7 @@
         <input
             type="text"
             bind:value={message}
+            bind:this={messageInput}
             class="input-field"
             placeholder="Type a message..."
         />
