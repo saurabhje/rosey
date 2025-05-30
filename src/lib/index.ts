@@ -5,7 +5,7 @@ const client = new MongoClient(PRIVATE_URI);
 
 export async function connectToDatabase() {
     await client.connect();
-    return client.db("rosey");
+    return client.db("rosey-chat");
 }
 
 export type ChatMessage = {
@@ -13,3 +13,8 @@ export type ChatMessage = {
     text: string;
     timestamp: string;
 };
+
+export type groupeDmessage = {
+    date: string
+    messages: ChatMessage[];
+}

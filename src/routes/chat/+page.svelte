@@ -3,6 +3,7 @@
     import { onMount, afterUpdate } from "svelte";
     import type { ChatMessage } from "$lib";
     import * as Ably from "ably";
+    import { getDateLabel } from "$lib/utils";
     export let data: { user: string };
 
     const username = data.user;
@@ -11,6 +12,7 @@
     let messagesContainer: HTMLDivElement;
     let sendButton: HTMLInputElement;
     let channel: any;
+    let groupMessage: Record<string, ChatMessage[]> = {};
 
     onMount(async () => {
         try {
@@ -53,10 +55,22 @@
                 body: JSON.stringify(newMessage),
             });
             if (!response.ok) {
-                console.error("Failed to save message");
+                console.log("Failed to save message");
             }
         }
     }
+    $: groupMessage = messages.reduce(
+        (groups, msg) => {
+            const date = getDateLabel(msg.timestamp)
+            if (!groups[date]) {
+                groups[date] = [];
+            }
+            groups[date].push(msg);
+            return groups;
+        },
+        {} as Record<string, ChatMessage[]>,
+    );
+
     afterUpdate(() => {
         if (messagesContainer) {
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -68,7 +82,7 @@
         } else if (user === "sera") {
             return "#08018a";
         } else if (user === "je") {
-            return "#f20505";
+            return "#00baa1";
         } else {
             return "";
         }
@@ -84,25 +98,32 @@
 <h1 style="text-align: center; font-family:monospace;">Chat</h1>
 <div class="chat-container">
     <div class="messages" bind:this={messagesContainer}>
-        {#each messages as msg}
-            <p
-                class="message {msg.user === username
-                    ? 'my-message'
-                    : 'other-message'}"
-            >
-                <span class="username" style="color: {getUserColor(msg.user)};"
-                    >{msg.user}:</span
+        {#each Object.entries(groupMessage) as [label, msgs]}
+        <div class="date-group">
+            <p class="date-label">{label}</p>
+            {#each msgs as msg}
+                <p
+                    class="message {msg.user === username
+                        ? 'my-message'
+                        : 'other-message'}"
                 >
+                    <span
+                        class="username"
+                        style="color: {getUserColor(msg.user)};"
+                        >{msg.user}:</span
+                    >
 
-                <span class="text"> {msg.text}</span>
-                <br />
-                <span class="timestamp">
-                    {new Date(msg.timestamp).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                    })}
-                </span>
-            </p>
+                    <span class="text"> {msg.text}</span>
+                    <br />
+                    <span class="timestamp">
+                        {new Date(msg.timestamp).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                        })}
+                    </span>
+                </p>
+            {/each}
+        </div>
         {/each}
     </div>
 

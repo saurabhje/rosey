@@ -11,12 +11,21 @@
 }
 .messages {
     flex-grow: 1;
-    display: flex;
-    flex-direction: column;
     overflow-y: auto;
     margin-bottom: 8px;
 }
-
+.date-group{
+    display: flex;
+    flex-direction: column;
+}
+.date-label{
+    text-align: center;
+    color: #888;
+    font-size: 0.9em;
+    margin: 0;
+    font-weight: 600;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 .message {
     font-family: "Arial", sans-serif;
     display: inline-block;

@@ -4,7 +4,10 @@ import type { ChatMessage } from '$lib'
 
 export async function GET() {
     const db = await connectToDatabase();
-    const messages = await db.collection('messages').find().sort({ _id: 1 }).toArray();
+    const messages = await db.collection('messages')
+        .find()
+        .sort({ _id: -1 })
+        .toArray();
     return json(messages);
 }
 
