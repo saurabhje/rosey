@@ -9,7 +9,7 @@ export async function GET({url}) {
     const query = lastid ? { _id: { $lt: new ObjectId(lastid) } } : {};
     const messages = await db.collection('messages')
         .find(query)
-        .limit(5)
+        .limit(10)
         .sort({ _id: -1 })
         .toArray();
     return json(messages.reverse());
