@@ -14,17 +14,32 @@
     let channel: any;
     let groupMessage: Record<string, ChatMessage[]> = {};
 
-    onMount(async () => {
+    async function loadMessage(loadmore = false) {
+        let lastid: any = "";
+        if (loadmore && messages.length > 0) {
+            lastid = messages[0]?._id ?? "";
+        }
+        let url = "/chat";
+        if (lastid) {
+            url += `?lastid=${lastid}`;
+        }
         try {
-            const response = await fetch("/chat");
+            const response = await fetch(url);
             if (!response.ok) {
                 throw new Error("Failed to fetch messages");
             }
-            const Oldmessages = await response.json();
-            messages = Oldmessages;
+            const newMessages = await response.json();
+            if (loadmore) {
+                messages = [...newMessages, ...messages];
+            } else {
+                messages = newMessages;
+            }
         } catch (error) {
             console.error("Error fetching messages:", error);
         }
+    }
+    onMount(async () => {
+        await loadMessage();
         const ablyClient = new Ably.Realtime({
             key: import.meta.env.VITE_SOCKET,
             clientId: username,
@@ -61,7 +76,7 @@
     }
     $: groupMessage = messages.reduce(
         (groups, msg) => {
-            const date = getDateLabel(msg.timestamp)
+            const date = getDateLabel(msg.timestamp);
             if (!groups[date]) {
                 groups[date] = [];
             }
@@ -98,32 +113,33 @@
 <h1 style="text-align: center; font-family:monospace;">Chat</h1>
 <div class="chat-container">
     <div class="messages" bind:this={messagesContainer}>
+        <button on:click={() => loadMessage(true)}>More message</button>
         {#each Object.entries(groupMessage) as [label, msgs]}
-        <div class="date-group">
-            <p class="date-label">{label}</p>
-            {#each msgs as msg}
-                <p
-                    class="message {msg.user === username
-                        ? 'my-message'
-                        : 'other-message'}"
-                >
-                    <span
-                        class="username"
-                        style="color: {getUserColor(msg.user)};"
-                        >{msg.user}:</span
+            <div class="date-group">
+                <p class="date-label">{label}</p>
+                {#each msgs as msg}
+                    <p
+                        class="message {msg.user === username
+                            ? 'my-message'
+                            : 'other-message'}"
                     >
+                        <span
+                            class="username"
+                            style="color: {getUserColor(msg.user)};"
+                            >{msg.user}:</span
+                        >
 
-                    <span class="text"> {msg.text}</span>
-                    <br />
-                    <span class="timestamp">
-                        {new Date(msg.timestamp).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                        })}
-                    </span>
-                </p>
-            {/each}
-        </div>
+                        <span class="text"> {msg.text}</span>
+                        <br />
+                        <span class="timestamp">
+                            {new Date(msg.timestamp).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                            })}
+                        </span>
+                    </p>
+                {/each}
+            </div>
         {/each}
     </div>
 
