@@ -29,8 +29,8 @@
     </pre>
 </div>
 <div class="links">
-    <a href="/rosey">rosey</a>
-    <a href="/about">about</a>
+    <!-- <a href="/rosey">rosey</a> -->
+    <!-- <a href="/about">about</a> -->
     <a href="/chat">chat</a>
 </div>
 <style>

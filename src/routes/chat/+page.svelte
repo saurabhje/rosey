@@ -170,6 +170,13 @@ onMount(async () => {
 </script>
 
 <h1 style="text-align: center; font-family:monospace;">Chat</h1>
+<a
+  href="/"
+  style="text-decoration: underline; font-family: monospace; color: black; font-size: 1.4em;"
+>
+  home
+</a>
+
 <div class="chat-container">
     <div class="messages" bind:this={messagesContainer}>
         <button on:click={() => loadMessage(true)}>More message</button>
