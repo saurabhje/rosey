@@ -11,8 +11,72 @@
     let message: string = "";
     let messagesContainer: HTMLDivElement;
     let sendButton: HTMLInputElement;
-    let channel: any;
     let groupMessage: Record<string, ChatMessage[]> = {};
+    let ablyClient: Ably.Realtime;
+    let channel: Ably.Types.RealtimeChannelCallbacks;
+    let ablyReady = false;
+
+function waitForAblyReady(): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    if (!ablyClient || !channel) return reject("Ably not ready");
+
+    const attachChannel = () => {
+      channel.attach((err) => {
+        if (err) return reject(err);
+        ablyReady = true;
+        resolve();
+      });
+    };
+
+    if (ablyClient.connection.state === "connected" && channel.state === "attached") {
+      ablyReady = true;
+      return resolve();
+    }
+
+    if (ablyClient.connection.state === "connected") {
+      return attachChannel();
+    }
+
+    ablyClient.connection.once("connected", attachChannel);
+    ablyClient.connection.once("failed", () => reject("Ably connection failed"));
+  });
+}
+
+
+onMount(async () => {
+    await loadMessage();
+    ablyClient = new Ably.Realtime({
+        key: import.meta.env.VITE_SOCKET,
+        clientId: username,
+    });
+
+    channel = ablyClient.channels.get("public-chat");
+    channel.subscribe("message", (msg: any) => {
+        messages = [...messages, msg.data];
+    });
+    try {
+  await waitForAblyReady();
+  console.log("✅ Ably ready");
+} catch (err) {
+  console.error("❌ Ably connection issue:", err);
+}
+
+});
+
+    async function publishWithRetry(eventName: string, data: any, retries = 2) {
+  let lastErr: any;
+
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      await channel.publish(eventName, data);
+      return;
+    } catch (err) {
+      lastErr = err;
+      await new Promise((r) => setTimeout(r, 250));
+    }
+  }
+  throw lastErr;
+}
 
     async function loadMessage(loadmore = false) {
         let lastid: any = "";
@@ -38,18 +102,6 @@
             console.error("Error fetching messages:", error);
         }
     }
-    onMount(async () => {
-        await loadMessage();
-        const ablyClient = new Ably.Realtime({
-            key: import.meta.env.VITE_SOCKET,
-            clientId: username,
-        });
-
-        channel = ablyClient.channels.get("public-chat");
-        channel.subscribe("message", (msg: any) => {
-            messages = [...messages, msg.data];
-        });
-    });
 
     async function addMessage(event: Event): Promise<void> {
         event.preventDefault();
@@ -59,18 +111,25 @@
                 text: message,
                 timestamp: new Date().toISOString(),
             };
-            await channel.publish("message", newMessage);
-            sendButton?.focus();
-            message = "";
-            const response = await fetch("/chat", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(newMessage),
-            });
-            if (!response.ok) {
-                console.log("Failed to save message");
+            try{
+                if (!ablyReady) await waitForAblyReady();
+                await publishWithRetry("message", newMessage, 2);
+                message = "";
+                sendButton?.focus();
+                const response = await fetch("/chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(newMessage),
+                });
+                if (!response.ok) {
+                    console.log("Failed to save message");
+                }
+
+            }catch(err){
+                    console.error("Message failed:", err);
+
             }
         }
     }
